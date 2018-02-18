@@ -1,15 +1,15 @@
-class HomeController {
+class HomeController implements ng.IController {
   constructor() { }
 
-  protected $onInit(): void {
+  public $onInit(): void {
     console.log('home.init');
   }
 
 }
 
-export default class HomeComponent {
+export default class HomeComponent implements ng.IComponentOptions {
 
-  static NAME: string = 'home';
+  static NAME: string = 'homeView';
   public controller: any;
   public template: string;
 

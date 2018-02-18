@@ -1,16 +1,16 @@
-class TodoListController {
-  constructor() {
-   }
+class TodoListController implements ng.IController {
 
-  protected $onInit(): void {
+  constructor() { }
+
+  public $onInit(): void {
     console.log('todoList.init');
   }
 
 }
 
-export default class TodoListComponent {
+export default class TodoListComponent implements ng.IComponentOptions {
 
-  static NAME: string = 'todoList';
+  static NAME: string = 'todoListView';
   public controller: any;
   public template: string;
   public bindings: any = { todos: '<' };

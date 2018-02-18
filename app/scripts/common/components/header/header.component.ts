@@ -1,13 +1,13 @@
-class HeaderController {
+class HeaderController implements ng.IController {
   constructor() { }
 
-  protected $onInit(): void {
+  public $onInit(): void {
     console.log('header.init');
   }
 
 }
 
-export default class HeaderComponent {
+export default class HeaderComponent implements ng.IComponentOptions {
 
   static NAME: string = 'appHeader';
   public controller: any;

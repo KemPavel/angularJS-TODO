@@ -1,13 +1,18 @@
+/// <reference types="node" />
 /// <reference types="angular" />
 /// <reference types="angular-ui-router" />
 
 import * as angular from 'angular';
 import '@uirouter/angularjs';
 
-import HomeComponent from './home/home.component';
-import HeaderComponent from './common/header/header.component';
-import TodoListComponent from './todo-list/todo-list.component';
-import TodoItemComponent from './todo-list/todo-item/todo-item.component';
+// Components
+import HomeComponent from './components/home/home.component';
+import HeaderComponent from './common/components/header/header.component';
+import TodoListComponent from './components/todo-list/todo-list.component';
+import TodoItemComponent from './components/todo-list/todo-item/todo-item.component';
+
+// Services
+import TodosService from './services/todo-list.service';
 
 interface Todo {
   id: string;
@@ -35,8 +40,8 @@ angular.module('todoApp', ['ui.router'])
         url: '/todos',
         component: TodoListComponent.NAME,
         resolve: { // описать в компоненте
-          todos(TodosService: TodoService) {
-            return TodosService.getTodos();
+          todos(todosService: TodoService) {
+            return todosService.getTodos();
           }
         }
       },
@@ -62,26 +67,4 @@ angular.module('todoApp', ['ui.router'])
   .component(HomeComponent.NAME, new HomeComponent())
   .component(TodoListComponent.NAME, new TodoListComponent())
   .component(TodoItemComponent.NAME, new TodoItemComponent())
-
-  .service('TodosService', () => {
-    const todos = [
-      {
-        title: 'todo_1',
-        id: '1'
-      },
-      {
-        title: 'todo_2',
-        id: '2'
-      }
-    ];
-    const service = {
-      getTodos(): Array<Todo> {
-        return todos;
-      },
-      getTodo(id: string) {
-        return todos[id];
-      }
-    };
-
-    return service;
-  });
+  .service(TodosService.NAME, TodosService);

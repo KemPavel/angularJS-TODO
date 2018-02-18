@@ -1,14 +1,14 @@
-class TodoItemController {
+class TodoItemController implements ng.IController {
   constructor() {
    }
 
-  protected $onInit(): void {
+  public $onInit(): void {
     console.log('TodoItem.init');
   }
 
 }
 
-export default class TodoItemComponent {
+export default class TodoItemComponent implements ng.IComponentOptions {
 
   static NAME: string = 'todoItem';
   public controller: any;
