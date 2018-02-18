@@ -1,86 +1,87 @@
+/// <reference types="angular" />
+/// <reference types="angular-ui-router" />
+
 import * as angular from 'angular';
 import '@uirouter/angularjs';
 
-import app from './app/app.component';
+import HomeComponent from './home/home.component';
+import HeaderComponent from './common/header/header.component';
+import TodoListComponent from './todo-list/todo-list.component';
+import TodoItemComponent from './todo-list/todo-item/todo-item.component';
+
+interface Todo {
+  id: string;
+  title: string;
+}
+
+interface TodoService {
+  getTodos(): Array<Todo>;
+}
 
 angular.module('todoApp', ['ui.router'])
-  .config(($stateProvider, $locationProvider) => {
+  .config([
+    '$stateProvider', 
+    '$locationProvider', 
+    '$urlRouterProvider',
+    ($stateProvider: ng.ui.IStateProvider, $locationProvider: ng.ILocationProvider, $urlRouterProvider: ng.ui.IUrlRouterProvider) => {
     const states = [
       {
         name: 'home',
         url: '/',
-        component: 'home'
+        component: HomeComponent.NAME
       },
       {
         name: 'todos',
         url: '/todos',
-        component: 'todos',
-        resolve: {
-          todos(TodosService) {
+        component: TodoListComponent.NAME,
+        resolve: { // описать в компоненте
+          todos(TodosService: TodoService) {
             return TodosService.getTodos();
           }
         }
       },
       {
-        name: 'todo',
-        url: '/todos/{todoId}',
-        component: 'todo',
-        resolve: {
-          todo(TodosService, $transition$) {
-            return TodosService.getTodo($transition$.params().todoId);
+        name: 'todos.todo',
+        url: '/{todoId}',
+        component: TodoItemComponent.NAME,
+        resolve: { // описать в компоненте
+          todo(todos: Array<Todo>, $stateParams: ng.ui.IStateParamsService) {
+            return todos.find((todo: Todo) => {
+              return todo.id === $stateParams.todoId;
+            });
           }
         }
       }
     ];
 
-    states.forEach(state => {
-      $stateProvider.state(state);
-    })
     $locationProvider.html5Mode(true);
+    states.forEach(state => { $stateProvider.state(state); });
+    $urlRouterProvider.otherwise('errorPage');
+  }])
+  .component(HeaderComponent.NAME, new HeaderComponent())
+  .component(HomeComponent.NAME, new HomeComponent())
+  .component(TodoListComponent.NAME, new TodoListComponent())
+  .component(TodoItemComponent.NAME, new TodoItemComponent())
 
+  .service('TodosService', () => {
+    const todos = [
+      {
+        title: 'todo_1',
+        id: '1'
+      },
+      {
+        title: 'todo_2',
+        id: '2'
+      }
+    ];
+    const service = {
+      getTodos(): Array<Todo> {
+        return todos;
+      },
+      getTodo(id: string) {
+        return todos[id];
+      }
+    };
 
-  })
-  .component('app', app);
-  // .component('home', {
-  //   template: '<h3>{{$ctrl.name}} component</h3><div><a ui-sref="todos">Todos</a></div>',
-  //   controller() { // here goes the controller class
-  //     this.name = 'Home';
-  //   }
-  // })
-  // .component('todos', {
-  //   bindings: { todos: '<' },
-  //   template: '<h3>Your todos:</h3>' +
-  //     '<ul>' +
-  //     '  <li ng-repeat="todo in $ctrl.todos">' +
-  //     '    <a ui-sref="todo({ todoId: todo.id })">' +
-  //     '      {{todo.title}}' +
-  //     '    </a>' +
-  //     '  </li>' +
-  //     '</ul>'
-  // })
-  // .component('todo', {
-  //   bindings: { todo: '<' },
-  //   template: '<h3>{{$ctrl.todo.title}}</h3>'
-  // })
-  // .service('TodosService', $http => {
-  //   const todos = [
-  //     {
-  //       title: 'todo_1',
-  //       id: 1
-  //     },
-  //     {
-  //       title: 'todo_2',
-  //       id: 2
-  //     }
-  //   ];
-  //   const service = {
-  //     getTodos() {
-  //       return todos;
-  //     },
-  //     getTodo(id) {
-  //       return todos[id - 1];
-  //     }
-  //   };
-
-  //   return service;
-  // })
+    return service;
+  });
