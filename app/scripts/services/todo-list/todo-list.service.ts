@@ -1,7 +1,4 @@
-interface Todo {
-  id: string;
-  title: string;
-}
+import Todo from './todo-item.model';
 
 export default class TodosService {
   static $inject = ['$q', '$http'];
