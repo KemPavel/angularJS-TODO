@@ -1,7 +1,7 @@
 {
-  "name": "angularJS-TODO",
+  "name": "angularJS-startkit",
   "version": "1.0.0",
-  "description": "Todo application",
+  "description": "The minimal set for starting angularJS app with webpack and TS",
   "main": "index.js",
   "dependencies": {
     "@uirouter/angularjs": "^1.0.15",
